@@ -1,4 +1,4 @@
-FROM ubuntu:wily
+FROM ubuntu:14.04
 
 # Originally based on https://github.com/philipz/docker-nginx-hhvm-wordpress
 MAINTAINER Adam Yeats <ay@xadamy.xyz>
@@ -7,7 +7,7 @@ MAINTAINER Adam Yeats <ay@xadamy.xyz>
 RUN apt-get update && apt-get -y upgrade && apt-get -y install software-properties-common
 
 # Pre-add nginx repo
-RUN echo "deb http://ppa.launchpad.net/nginx/stable/ubuntu wily main" > /etc/apt/sources.list.d/nginx-$nginx-wily.list
+RUN echo "deb http://ppa.launchpad.net/nginx/stable/ubuntu 14.04 main" > /etc/apt/sources.list.d/nginx-$nginx-14.04.list
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C300EE8C
 
 # Pre-add nginx repo
@@ -15,14 +15,17 @@ RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0x5a16e728
 RUN add-apt-repository "deb http://dl.hhvm.com/ubuntu $(lsb_release -sc) main"
 
 # If it's not going to change often do it first to allow Docker build to
-# use as much caching as possible to minimise build times
+# use as much caching as possible to minimize build times
 RUN apt-get update && apt-get -y upgrade
 
 # Basic Requirements
-RUN apt-get -y install nginx git php5-mysql php-apc curl unzip wget python-pip
+RUN apt-get -y install nginx git curl unzip wget python-pip
+
+# PHP
+RUN apt-get -y install php7.1-cli php7.1-common php7.1-curl php7.1-dev php7.1-fpm php7.1-gd php7.1-mbstring php7.1-mcrypt php7.1-mysql php7.1-opcache php7.1-xml php7.1-xmlrpc php7.1-zip php-redis
 
 # Wordpress Requirements
-RUN apt-get -y install libnuma-dev php5-fpm php5-curl php5-gd php5-intl php-pear php5-imagick php5-imap php5-mcrypt php5-memcache php5-ming php5-ps php5-pspell php5-recode php5-sqlite php5-tidy php5-xmlrpc php5-xsl
+RUN apt-get -y install libnuma-dev
 
 # HHVM install
 RUN apt-get -y install hhvm
@@ -65,6 +68,3 @@ COPY makedb.php /makedb.php
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
-
-
-

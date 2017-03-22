@@ -68,7 +68,7 @@ fi
 php /makedb.php "$DB_HOST" "$DB_USER" "$DB_PASSWORD" "$DB_NAME"
 
 # bring up our PHP binaries
-/etc/init.d/php5-fpm start
+/etc/init.d/php7.1-fpm start
 /etc/init.d/hhvm start
 
 echo >&2 "========================================================================"
