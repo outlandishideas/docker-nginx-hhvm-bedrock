@@ -1,18 +1,21 @@
-FROM ubuntu:14.04
+FROM ubuntu:xenial
 
 # Originally based on https://github.com/philipz/docker-nginx-hhvm-wordpress
 MAINTAINER Adam Yeats <ay@xadamy.xyz>
 
 # Get latest version of software-properties-common first
-RUN apt-get update && apt-get -y upgrade && apt-get -y install software-properties-common
+RUN apt-get update && apt-get -y upgrade && apt-get -y install software-properties-common build-essential
 
 # Pre-add nginx repo
-RUN echo "deb http://ppa.launchpad.net/nginx/stable/ubuntu 14.04 main" > /etc/apt/sources.list.d/nginx-$nginx-14.04.list
+RUN echo "deb http://ppa.launchpad.net/nginx/stable/ubuntu xenial main" > /etc/apt/sources.list.d/nginx-$nginx-xenial.list
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C300EE8C
 
 # Pre-add nginx repo
 RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0x5a16e7281be7a449
 RUN add-apt-repository "deb http://dl.hhvm.com/ubuntu $(lsb_release -sc) main"
+
+# Pre-add php repo
+RUN LC_ALL=C.UTF-8 add-apt-repository -y ppa:ondrej/php && apt-get -y update
 
 # If it's not going to change often do it first to allow Docker build to
 # use as much caching as possible to minimize build times
@@ -22,7 +25,7 @@ RUN apt-get update && apt-get -y upgrade
 RUN apt-get -y install nginx git curl unzip wget python-pip
 
 # PHP
-RUN apt-get -y install php7.1-cli php7.1-common php7.1-curl php7.1-dev php7.1-fpm php7.1-gd php7.1-mbstring php7.1-mcrypt php7.1-mysql php7.1-opcache php7.1-xml php7.1-xmlrpc php7.1-zip php-redis
+RUN apt-get -y install php7.1 php7.1-cli php7.1-common php7.1-curl php7.1-dev php7.1-fpm php7.1-gd php7.1-mbstring php7.1-mcrypt php7.1-mysql php7.1-opcache php7.1-xml php7.1-xmlrpc php7.1-zip php-redis
 
 # Wordpress Requirements
 RUN apt-get -y install libnuma-dev
