@@ -30,18 +30,9 @@ RUN apt-get -y install php7.1 php7.1-cli php7.1-common php7.1-curl php7.1-dev ph
 # WordPress Requirements
 RUN apt-get -y install libnuma-dev
 
-# HHVM install
-RUN apt-get -y install hhvm
-
 WORKDIR /
 
-# hhvm config
-RUN /usr/share/hhvm/install_fastcgi.sh
-RUN /etc/init.d/hhvm restart
-RUN update-rc.d hhvm defaults
-RUN /usr/bin/update-alternatives --install /usr/bin/php php /usr/bin/hhvm 60
-
-# install Composer
+# Install Composer
 RUN curl -sS https://getcomposer.org/installer | php
 RUN chmod +x composer.phar
 RUN mv composer.phar /usr/local/bin/composer
