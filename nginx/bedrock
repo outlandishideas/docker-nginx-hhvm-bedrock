@@ -45,7 +45,6 @@ server {
   # PHP-FPM 7.1
   location ~ \.(hh|php)$ {
     proxy_intercept_errors on;
-    error_page 502 = @fallback;
 
     try_files $uri /index.php;
 
