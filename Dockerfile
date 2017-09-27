@@ -49,6 +49,7 @@ RUN rm /etc/nginx/sites-enabled/default
 
 # Map local files
 ADD nginx/bedrock /etc/nginx/sites-enabled/bedrock
+COPY php/www.conf /etc/php/7.1/fpm/pool.d/www.conf
 
 # install ngxtop, useful for debugging
 RUN pip install ngxtop
